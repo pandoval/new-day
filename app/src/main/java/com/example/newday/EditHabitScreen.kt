@@ -38,7 +38,7 @@ fun EditHabitScreen(habits: List<Habit>, navController: NavController, adding: B
         },
         content = {
             Box(modifier = Modifier.padding(it)) {
-                EditableHabitList(habits)
+
             }
         }
     )

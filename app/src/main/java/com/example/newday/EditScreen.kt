@@ -1,5 +1,7 @@
 package com.example.newday
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,10 +12,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -61,28 +67,77 @@ fun EditScreen(habits: List<Habit>, navController: NavController, viewModel: Hab
         },
         content = {
             Box(modifier = Modifier.padding(it)) {
-                EditableHabitList(habits)
+                EditableHabitList(habits, viewModel)
                 DeleteAllDialog(deleteDialog = deleteDialog, viewModel = viewModel)
             }
         }
     )
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun EditableHabitList(habits: List<Habit>) {
+fun EditableHabitList(habits: List<Habit>, viewModel: HabitViewModel) {
     LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = Modifier.padding(vertical = 8.dp)
+        verticalArrangement = Arrangement.spacedBy(1.dp),
+        modifier = Modifier.padding(vertical = 0.dp)
     ) {
-        items(habits) { habit ->
-            EditableHabit(habit)
+        items(habits, { habit: Habit -> habit.id}) { habit ->
+            val dismissState = rememberDismissState()
+            if (dismissState.isDismissed(DismissDirection.EndToStart)){
+                viewModel.deleteById(habit.id)
+            }
+            SwipeToDismiss(
+                state = dismissState,
+                directions = setOf(DismissDirection.EndToStart),
+                dismissThresholds = {
+                    FractionalThreshold(.15f)
+                },
+                background = {
+                    val direction = dismissState.dismissDirection ?: return@SwipeToDismiss
+                    val color by animateColorAsState(
+                        when (dismissState.targetValue) {
+                            DismissValue.Default -> TextSecondary
+                            DismissValue.DismissedToEnd -> Color.Green
+                            DismissValue.DismissedToStart -> SecondaryRed
+                        }
+                    )
+                    val alignment = when (direction) {
+                        DismissDirection.StartToEnd -> Alignment.CenterStart
+                        DismissDirection.EndToStart -> Alignment.CenterEnd
+                    }
+                    val icon = when (direction) {
+                        DismissDirection.StartToEnd -> Icons.Default.Done
+                        DismissDirection.EndToStart -> Icons.Default.Delete
+                    }
+                    val scale by animateFloatAsState(
+                        if (dismissState.targetValue == DismissValue.Default) 0.75f else 1f
+                    )
+
+                    Box(
+                        Modifier
+                            .fillMaxSize()
+                            .background(color)
+                            .padding(horizontal = 20.dp),
+                        contentAlignment = alignment
+                    ) {
+                        Icon(
+                            icon,
+                            contentDescription = "Swipe to delete icon",
+                            modifier = Modifier.scale(scale)
+                        )
+                    }
+                },
+                dismissContent = {
+                    EditableHabit(habit)
+                }
+            )
         }
     }
 }
 
 @Composable
 fun EditableHabit(habit: Habit) {
-    Card(modifier = Modifier
+    Card(shape = RectangleShape, modifier = Modifier
         .fillMaxWidth()
         .height(48.dp)) {
 

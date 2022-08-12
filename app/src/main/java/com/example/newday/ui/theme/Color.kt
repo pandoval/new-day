@@ -15,4 +15,4 @@ val Text = Color(0xffbbbbbb)
 val TextSecondary = Color(0xff8a8a8a)
 val AlmostBlack = Color(0xff161511)
 val SecondaryBlue = Color(0xff3b93da)
-
+val SecondaryRed = Color(0xffcc3300)

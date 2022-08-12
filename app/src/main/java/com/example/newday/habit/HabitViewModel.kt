@@ -15,8 +15,8 @@ class HabitViewModel(private val repository: HabitRepository): ViewModel() {
         repository.deleteAll()
     }
 
-    fun deleteByName(name: String) = viewModelScope.launch {
-        repository.deleteByName(name)
+    fun deleteById(id: Long) = viewModelScope.launch {
+        repository.deleteById(id)
     }
 
     class HabitViewModelFactory(private val repository: HabitRepository) : ViewModelProvider.Factory {

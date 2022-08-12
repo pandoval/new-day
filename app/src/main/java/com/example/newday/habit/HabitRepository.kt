@@ -26,7 +26,7 @@ class HabitRepository(private val habitDao: HabitDao) {
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    suspend fun deleteByName(name: String) {
-        habitDao.deleteByName(name)
+    suspend fun deleteById(id: Long) {
+        habitDao.deleteById(id)
     }
 }
