@@ -4,9 +4,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.material.icons.Icons
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.Color
+import androidx.core.content.ContextCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -26,6 +29,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Set status bar color to AlmostBlack
+        this.window.statusBarColor = 0xff161511.toInt()
+
         setContent {
 
             habits = remember { mutableStateOf(listOf()) }
@@ -40,6 +46,12 @@ class MainActivity : ComponentActivity() {
                     composable(EDIT_SCREEN) {
                         EditScreen(habits.value, navController)
                     }
+                    composable(EDIT_HABIT_SCREEN) {
+                        EditHabitScreen(habits.value, navController)
+                    }
+                    composable(ADD_HABIT_SCREEN) {
+                        AddHabitScreen(habitViewModel, navController)
+                    }
                 }
             }
         }
@@ -52,5 +64,8 @@ class MainActivity : ComponentActivity() {
     companion object {
         const val MAIN_SCREEN = "main_screen"
         const val EDIT_SCREEN = "edit_screen"
+        const val EDIT_HABIT_SCREEN = "edit_habit_screen"
+        const val ADD_HABIT_SCREEN = "add_habit_screen"
+        val NewDayIcons = Icons.Filled
     }
 }

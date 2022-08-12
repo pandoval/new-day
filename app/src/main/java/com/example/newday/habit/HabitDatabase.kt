@@ -1,14 +1,13 @@
 package com.example.newday.habit
 
 import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Database(entities = [Habit::class], version = 1, exportSchema = false)
+@TypeConverters(HabitConverters::class)
 abstract class HabitDatabase: RoomDatabase() {
 
     abstract fun habitDao(): HabitDao

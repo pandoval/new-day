@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -22,7 +21,7 @@ fun MainScreen(habits: List<Habit>, navController: NavController) {
                 actions = {
                     IconButton(onClick = { navController.navigate(MainActivity.EDIT_SCREEN) }) {
                         Icon(
-                            Icons.Filled.Edit,
+                            MainActivity.NewDayIcons.Edit,
                             contentDescription = "Edit button"
                         )
                     }
