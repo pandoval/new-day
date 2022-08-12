@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.newday.habit.Habit
 import com.example.newday.habit.HabitViewModel
+import com.example.newday.ui.theme.AlmostBlack
 import com.example.newday.ui.theme.DarkGray
 import com.example.newday.ui.theme.DarkerGray
 import com.example.newday.ui.theme.SecondaryBlue
@@ -130,6 +131,6 @@ fun EditHabitDaySelectable(habit: Habit, day: Day) {
             backgroundColor = if (selected) SecondaryBlue else DarkGray
         )
     ) {
-        Text(day.abr)
+        Text(day.abr, color = if(selected) AlmostBlack else com.example.newday.ui.theme.Text)
     }
 }
