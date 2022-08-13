@@ -2,7 +2,9 @@ package com.example.newday.habit
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.serialization.Serializable
 
+@Serializable
 @Entity(tableName = "habit_table")
 data class Habit(
     var name: String,

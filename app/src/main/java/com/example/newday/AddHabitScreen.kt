@@ -79,7 +79,7 @@ fun AddHabitScreen(viewModel: HabitViewModel, navController: NavController) {
 @Composable
 fun EditHabitContent(habit: Habit) {
 
-    var name by remember { mutableStateOf("")}
+    var name by remember { mutableStateOf(habit.name)}
 
     Column(
         verticalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier.padding(8.dp),
@@ -113,7 +113,7 @@ fun EditHabitContent(habit: Habit) {
 fun EditHabitDaySelectable(habit: Habit, day: Day) {
 
     var selected by remember {
-        mutableStateOf(false)
+        mutableStateOf(habit.days[day.num])
     }
 
     Button(

@@ -3,6 +3,7 @@ package com.example.newday
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -29,6 +30,8 @@ import androidx.navigation.NavController
 import com.example.newday.habit.Habit
 import com.example.newday.habit.HabitViewModel
 import com.example.newday.ui.theme.*
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 @Composable
 fun EditScreen(habits: List<Habit>, navController: NavController, viewModel: HabitViewModel) {
@@ -67,7 +70,7 @@ fun EditScreen(habits: List<Habit>, navController: NavController, viewModel: Hab
         },
         content = {
             Box(modifier = Modifier.padding(it)) {
-                EditableHabitList(habits, viewModel)
+                EditableHabitList(habits, viewModel, navController)
                 DeleteAllDialog(deleteDialog = deleteDialog, viewModel = viewModel)
             }
         }
@@ -76,7 +79,7 @@ fun EditScreen(habits: List<Habit>, navController: NavController, viewModel: Hab
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun EditableHabitList(habits: List<Habit>, viewModel: HabitViewModel) {
+fun EditableHabitList(habits: List<Habit>, viewModel: HabitViewModel, navController: NavController) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(1.dp),
         modifier = Modifier.padding(vertical = 0.dp)
@@ -128,7 +131,7 @@ fun EditableHabitList(habits: List<Habit>, viewModel: HabitViewModel) {
                     }
                 },
                 dismissContent = {
-                    EditableHabit(habit)
+                    EditableHabit(habit, navController)
                 }
             )
         }
@@ -136,10 +139,13 @@ fun EditableHabitList(habits: List<Habit>, viewModel: HabitViewModel) {
 }
 
 @Composable
-fun EditableHabit(habit: Habit) {
+fun EditableHabit(habit: Habit, navController: NavController) {
     Card(shape = RectangleShape, modifier = Modifier
         .fillMaxWidth()
-        .height(48.dp)) {
+        .height(48.dp).clickable {
+            val habitString = Json.encodeToString(habit)
+            navController.navigate("${MainActivity.EDIT_HABIT_SCREEN}/$habitString")
+        }) {
 
         Box(modifier = Modifier.wrapContentSize(Alignment.CenterStart)) {
             Row(verticalAlignment = Alignment.CenterVertically) {

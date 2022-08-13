@@ -46,8 +46,12 @@ class MainActivity : ComponentActivity() {
                     composable(EDIT_SCREEN) {
                         EditScreen(habits.value, navController, habitViewModel)
                     }
-                    composable(EDIT_HABIT_SCREEN) {
-                        EditHabitScreen(habits.value, navController)
+                    composable("$EDIT_HABIT_SCREEN/{habit}") {
+                        EditHabitScreen(
+                            it.arguments?.getString("habit") ?: "",
+                            navController,
+                            habitViewModel
+                        )
                     }
                     composable(ADD_HABIT_SCREEN) {
                         AddHabitScreen(habitViewModel, navController)
