@@ -19,6 +19,8 @@ import com.example.newday.enums.Day
 import com.example.newday.habit.Habit
 import com.example.newday.habit.HabitApplication
 import com.example.newday.habit.HabitViewModel
+import com.example.newday.quote.Quote
+import com.example.newday.quote.QuoteViewModel
 import com.example.newday.ui.theme.NewDayTheme
 import java.time.LocalDate
 import java.util.*
@@ -27,10 +29,16 @@ import java.util.concurrent.TimeUnit
 class MainActivity : ComponentActivity() {
 
     private val habitViewModel: HabitViewModel by viewModels {
-        HabitViewModel.HabitViewModelFactory((application as HabitApplication).repository)
+        HabitViewModel.HabitViewModelFactory((application as HabitApplication).habitRepository)
+    }
+
+    private val quoteViewModel: QuoteViewModel by viewModels {
+        QuoteViewModel.QuoteViewModelFactory((application as HabitApplication).quoteRepository)
     }
 
     private var habits: MutableState<List<Habit>>? = null
+
+    private lateinit var dailyQuote: MutableState<Quote>
 
     private lateinit var day: Day
     private lateinit var dayTitle: String
@@ -63,13 +71,21 @@ class MainActivity : ComponentActivity() {
         setContent {
 
             habits = remember { mutableStateOf(habitViewModel.allHabits.value?: listOf()) }
+            dailyQuote = remember { mutableStateOf(quoteViewModel.dailyQuote.value ?: Quote()) }
 
             val navController = rememberNavController()
 
             NewDayTheme {
                 NavHost(navController, MAIN_SCREEN) {
                     composable(MAIN_SCREEN) {
-                        MainScreen(habits?.value ?: listOf(), navController, habitViewModel, day, dayTitle)
+                        MainScreen(
+                            habits?.value ?: listOf(),
+                            navController,
+                            habitViewModel,
+                            day,
+                            dayTitle,
+                            dailyQuote
+                        )
                     }
                     composable(EDIT_SCREEN) {
                         EditScreen(habits?.value ?: listOf(), navController, habitViewModel)
@@ -90,6 +106,10 @@ class MainActivity : ComponentActivity() {
 
         habitViewModel.allHabits.observe(this) { habits ->
             this.habits?.value = habits
+        }
+
+        quoteViewModel.dailyQuote.observe(this) {
+            this.dailyQuote.value = it ?: Quote()
         }
     }
 

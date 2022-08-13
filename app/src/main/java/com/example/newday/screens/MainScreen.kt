@@ -13,6 +13,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -20,6 +22,7 @@ import androidx.navigation.NavController
 import com.example.newday.enums.Day
 import com.example.newday.habit.Habit
 import com.example.newday.habit.HabitViewModel
+import com.example.newday.quote.Quote
 
 @Composable
 fun MainScreen(
@@ -27,7 +30,8 @@ fun MainScreen(
     navController: NavController,
     viewModel: HabitViewModel,
     day: Day,
-    dayTitle: String
+    dayTitle: String,
+    dailyQuote: MutableState<Quote>
 ) {
     Scaffold(
         topBar = {
@@ -45,7 +49,23 @@ fun MainScreen(
         },
         content = {
             Box(modifier = Modifier.padding(it)) {
-                HabitList(habits, viewModel, day)
+                Column() {
+                    HabitList(habits, viewModel, day)
+                    val quote = dailyQuote.value
+                    if(quote.size > 0) {
+                        Text(
+                            quote[0].q,
+                            Modifier.padding(start = 16.dp, bottom = 4.dp, end = 16.dp, top = 8.dp),
+                            fontStyle = FontStyle.Italic,
+                            fontSize = 16.sp
+                        )
+                        Text(
+                            "- ${quote[0].a}",
+                            Modifier.padding(horizontal = 16.dp),
+                            fontSize = 16.sp
+                        )
+                    }
+                }
             }
         }
     )
@@ -55,7 +75,7 @@ fun MainScreen(
 fun HabitList(habits: List<Habit>, viewModel: HabitViewModel, day: Day) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(0.dp),
-        modifier = Modifier.padding(8.dp, 0.dp, 8.dp, 8.dp)
+        modifier = Modifier.padding(16.dp, 8.dp, 16.dp, 8.dp)
     ) {
         items(habits) { habit ->
             if(habit.days[day.num]) {
