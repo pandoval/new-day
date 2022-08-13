@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.newday"
-        minSdk 23
+        minSdk 26
         targetSdk 32
         versionCode 1
         versionName "1.0"
@@ -51,6 +51,9 @@ dependencies {
 
     //Kotlinx serialization
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2'
+
+    //Work manager
+    implementation 'androidx.work:work-runtime-ktx:2.7.1'
 
     // Compose navigation
     def nav_version = "2.5.1"

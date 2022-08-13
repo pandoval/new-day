@@ -1,4 +1,4 @@
-package com.example.newday
+package com.example.newday.enums
 
 enum class Day(val abr: String, val full: String, val num: Int) {
     SUN("S", "Sunday", 0),

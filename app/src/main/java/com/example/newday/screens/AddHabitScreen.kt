@@ -7,15 +7,14 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.newday.enums.Day
 import com.example.newday.habit.Habit
 import com.example.newday.habit.HabitViewModel
 import com.example.newday.ui.theme.AlmostBlack
 import com.example.newday.ui.theme.DarkGray
-import com.example.newday.ui.theme.DarkerGray
 import com.example.newday.ui.theme.SecondaryBlue
 import kotlinx.coroutines.launch
 
